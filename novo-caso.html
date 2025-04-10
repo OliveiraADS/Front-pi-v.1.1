@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novo Caso</title>
+    <link rel="stylesheet" href="novo-caso.css">
+</head>
+<body>
+    <div class="novo-caso-container">
+        <h2 class="novo-caso-title">Cadastrar Novo Caso</h2>
+        
+        <form id="novoCasoForm" class="novo-caso-form">
+            <div class="form-group">
+                <label for="titulo_caso">Título do Caso*</label>
+                <input type="text" id="titulo_caso" name="titulo_caso" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="responsavel_caso">Responsável*</label>
+                <input type="text" id="responsavel_caso" name="responsavel_caso" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="processo_caso">Processo*</label>
+                <input type="text" id="processo_caso" name="processo_caso" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="data_abertura_caso">Data de Abertura*</label>
+                <input type="date" id="data_abertura_caso" name="data_abertura_caso" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="descricao_caso">Descrição*</label>
+                <textarea id="descricao_caso" name="descricao_caso" rows="4" required></textarea>
+            </div>
+            
+            <!-- Campo de status removido conforme solicitado -->
+            
+            <div class="form-actions">
+                <button type="button" id="cancelarBtn" class="btn-cancelar">Cancelar</button>
+                <button type="submit" class="btn-salvar">Salvar Caso</button>
+            </div>
+        </form>
+        
+        <div id="mensagem" class="mensagem"></div>
+    </div>
+
+    <script src="novo-caso.js"></script>
+</body>
+</html>

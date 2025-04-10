@@ -1,0 +1,93 @@
+.casos-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.casos-title {
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.casos-header {
+    display: flex;
+    justify-content: space-between;
+    background-color: #f8f9fa;
+    padding: 10px 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: #333;
+}
+
+.casos-header div {
+    flex: 1;
+    text-align: center;
+}
+
+.casos-header .id {
+    flex: 0.5;
+}
+
+#casos-lista {
+    margin-top: 20px;
+}
+
+.caso-item {
+    background-color: #e6f2ff; /* Azul claro conforme solicitado */
+    border-radius: 15px; /* Pontas arredondadas */
+    padding: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    color: #333; /* Cor do texto para melhor contraste */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    cursor: pointer; /* Adicionar cursor de ponteiro para indicar que é clicável */
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease; /* Transição suave para hover */
+}
+
+.caso-item:hover {
+    transform: translateY(-3px); /* Leve elevação ao passar o mouse */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Sombra mais pronunciada */
+    background-color: #d1e7ff; /* Tom mais escuro de azul ao passar o mouse */
+}
+
+.caso-item div {
+    flex: 1;
+    text-align: center;
+}
+
+.caso-item .id {
+    flex: 0.5;
+}
+
+.status-badge {
+    padding: 5px 10px;
+    border-radius: 20px;
+    color: white; /* Texto branco para os status conforme solicitado */
+    font-weight: bold;
+    display: inline-block;
+}
+
+.status-em-andamento {
+    background-color: #007bff; /* Azul para "Em andamento" */
+}
+
+.status-arquivado {
+    background-color: #6c757d; /* Cinza para "Arquivado" */
+}
+
+.status-finalizado {
+    background-color: #28a745; /* Verde para "Finalizado" */
+}
+
+.no-casos {
+    text-align: center;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    color: #666;
+}

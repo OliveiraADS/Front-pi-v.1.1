@@ -1,0 +1,169 @@
+/* Define as configurações básicas para todos os elementos */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Garante que padding e bordas sejam incluídos no cálculo da largura */
+    font-family: 'Arial', sans-serif; /* Define a fonte padrão para todo o site */
+}
+
+/* Estilização do corpo da página */
+body {
+    /* Background com imagem - deixei comentado para você adicionar sua própria imagem */
+    background-image: url(../img/dentista-perito-judicial-como-se-formar.png);
+    background-color: #f0f0f04b; /* Cor de fallback caso a imagem não carregue */
+    background-size: cover; /* Faz a imagem cobrir toda a tela */
+    background-position: center; /* Centraliza a imagem */
+    background-repeat: no-repeat; /* Evita repetição da imagem */
+    height: 100vh; /* Define a altura como 100% da viewport height (altura da janela) */
+    display: flex; /* Usa flexbox para centralizar o conteúdo */
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente */
+}
+
+/* Container principal que limita a largura máxima do conteúdo */
+.container {
+    max-width: 1280px; /* Largura máxima conforme solicitado */
+    width: 100%; /* Ocupa 100% da largura disponível até o máximo definido */
+    display: flex; /* Usa flexbox para organizar os elementos filhos */
+    justify-content: space-between; /* Distribui espaço entre os elementos */
+    align-items: center; /* Alinha verticalmente ao centro */
+    padding: 20px; /* Espaçamento interno */
+}
+
+/* Estilização do título à esquerda */
+.logo-container {
+    flex: 1; /* Ocupa uma parte flexível do espaço */
+    padding: 20px; /* Espaçamento interno */
+    text-align: center; /* Centraliza o texto */
+}
+
+.logo-text {
+    font-size: 48px; /* Tamanho grande da fonte conforme solicitado */
+    font-weight: bold; /* Texto em negrito */
+    color: #ffffff; /* Cor do texto */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Sombra suave para destacar o texto */
+}
+
+/* Estilização do formulário de login à direita */
+.login-container {
+    flex: 1; /* Ocupa uma parte flexível do espaço */
+    background-color: rgba(255, 255, 255, 0.85); /* Fundo branco com opacidade de 85% */
+    padding: 40px; /* Espaçamento interno */
+    border-radius: 10px; /* Borda arredondada */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+
+/* Estilização do título do formulário de login */
+.login-title {
+    font-size: 24px; /* Tamanho da fonte */
+    color: #333; /* Cor do texto */
+    margin-bottom: 20px; /* Espaçamento inferior */
+    text-align: center; /* Centraliza o texto */
+}
+
+/* Estilização dos grupos de formulário (cada campo) */
+.form-group {
+    margin-bottom: 20px; /* Espaçamento entre os campos */
+}
+
+/* Estilização das etiquetas dos campos */
+.form-group label {
+    display: block; /* Exibe como bloco para ficar acima do input */
+    margin-bottom: 8px; /* Espaçamento inferior */
+    font-weight: 600; /* Texto semi-negrito */
+    color: #333; /* Cor do texto */
+}
+
+/* Estilização dos campos de entrada */
+.form-group input {
+    width: 100%; /* Ocupa toda a largura disponível */
+    padding: 12px; /* Espaçamento interno */
+    border: 1px solid #ddd; /* Borda fina e clara */
+    border-radius: 4px; /* Borda arredondada */
+    font-size: 16px; /* Tamanho da fonte */
+}
+
+/* Efeito de foco nos campos de entrada */
+.form-group input:focus {
+    outline: none; /* Remove o contorno padrão */
+    border-color: #2196F3; /* Muda a cor da borda ao focar */
+    box-shadow: 0 0 5px rgba(33, 150, 243, 0.3); /* Adiciona sombra suave */
+}
+
+/* Estilização do botão de login */
+.btn-login {
+    width: 100%; /* Ocupa toda a largura disponível */
+    padding: 12px; /* Espaçamento interno */
+    background-color: #2196F3; /* Cor de fundo */
+    color: white; /* Cor do texto */
+    border: none; /* Remove a borda */
+    border-radius: 4px; /* Borda arredondada */
+    font-size: 16px; /* Tamanho da fonte */
+    font-weight: bold; /* Texto em negrito */
+    cursor: pointer; /* Muda o cursor para mãozinha ao passar por cima */
+    transition: background-color 0.3s ease; /* Transição suave da cor de fundo */
+}
+
+/* Efeito hover no botão de login */
+.btn-login:hover {
+    background-color: #0d1b2a; /* azul escuro */
+}
+
+/* Links de "Esqueceu a senha" e "Registrar" */
+.additional-links {
+    margin-top: 20px; /* Espaçamento superior */
+    text-align: center; /* Centraliza o texto */
+}
+
+.additional-links a {
+    color: #2196F3; /* Cor do link */
+    text-decoration: none; /* Remove o sublinhado */
+    margin: 0 10px; /* Espaçamento horizontal */
+    font-size: 14px; /* Tamanho da fonte */
+}
+
+.additional-links a:hover {
+    text-decoration: underline; /* Adiciona sublinhado ao passar o mouse */
+}
+
+/* Media query para responsividade em telas menores */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column; /* Muda para direção de coluna em telas pequenas */
+        padding: 10px; /* Reduz o padding */
+    }
+
+    .logo-container {
+        margin-bottom: 30px; /* Espaçamento entre logo e formulário */
+    }
+
+    .logo-text {
+        font-size: 36px; /* Reduz o tamanho da fonte */
+    }
+
+    .login-container {
+        width: 90%; /* Ajusta a largura */
+    }
+}
+
+
+/* Estilos para mensagens de resposta */
+#mensagem {
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.sucesso {
+    background-color: rgba(76, 175, 80, 0.2);
+    color: #4CAF50;
+    padding: 10px;
+    border-left: 4px solid #4CAF50;
+}
+
+.erro {
+    background-color: rgba(244, 67, 54, 0.2);
+    color: #F44336;
+    padding: 10px;
+    border-left: 4px solid #F44336;
+}

@@ -1,0 +1,133 @@
+/* Estilos para a página de detalhes do caso */
+.detalhes-caso-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.detalhes-caso-title {
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.detalhes-caso-form {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #333;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.form-group select {
+    background-color: white;
+    cursor: pointer;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.btn-voltar,
+.btn-deletar,
+.btn-atualizar {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-voltar {
+    background-color: #f8f9fa;
+    color: #333;
+    border: 1px solid #ddd;
+    margin-right: auto; /* Empurra este botão para a esquerda */
+}
+
+.btn-deletar {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-atualizar {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-voltar:hover {
+    background-color: #e9ecef;
+}
+
+.btn-deletar:hover {
+    background-color: #c82333;
+}
+
+.btn-atualizar:hover {
+    background-color: #0069d9;
+}
+
+.mensagem {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 5px;
+    display: none;
+}
+
+.sucesso {
+    display: block;
+    background-color: rgba(40, 167, 69, 0.1);
+    border-left: 4px solid #28a745;
+    color: #28a745;
+}
+
+.erro {
+    display: block;
+    background-color: rgba(220, 53, 69, 0.1);
+    border-left: 4px solid #dc3545;
+    color: #dc3545;
+}
+
+/* Indicador de campo obrigatório */
+.form-group label::after {
+    content: '*';
+    color: #dc3545;
+    margin-left: 4px;
+}
+
+/* Exceção para o campo de status */
+.form-group label[for="status_caso"]::after {
+    content: '';
+}
