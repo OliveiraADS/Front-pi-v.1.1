@@ -14,6 +14,47 @@ document.addEventListener('DOMContentLoaded', function() {
     // Referência à div de mensagem
     const mensagemDiv = document.getElementById('mensagem');
     
+    // Referência ao select de peritos
+    const selectPeritos = document.getElementById('responsavel_caso');
+    
+    // Função para carregar a lista de peritos da API
+    async function carregarPeritos() {
+        try {
+            console.log('Iniciando carregamento de peritos...');
+            
+            // Fazer requisição para a API que retorna apenas os peritos
+            const response = await fetch('http://localhost:5000/api/usuarios/tipo/Perito');
+            
+            if (!response.ok) {
+                throw new Error(`Erro ao carregar peritos: ${response.status} ${response.statusText}`);
+            }
+            
+            const peritos = await response.json();
+            console.log('Peritos carregados:', peritos);
+            
+            // Limpar o select antes de adicionar novas opções
+            selectPeritos.innerHTML = '<option value="">Selecione um perito</option>';
+            
+            // Adicionar cada perito como uma opção no select
+            peritos.forEach(perito => {
+                const option = document.createElement('option');
+                // Definimos o valor da option como o ID do perito (será enviado ao backend)
+                option.value = perito.id || perito._id; // Tentando tanto id quanto _id (MongoDB costuma usar _id)
+                // Definimos o texto visível como o nome do perito (será mostrado ao usuário)
+                option.textContent = perito.nome || perito.nome_completo || perito.name; // Tentando diferentes campos de nome
+                selectPeritos.appendChild(option);
+            });
+        } catch (error) {
+            console.error('Erro ao carregar peritos:', error);
+            mensagemDiv.className = 'mensagem erro';
+            mensagemDiv.textContent = 'Erro ao carregar a lista de peritos. Por favor, atualize a página.';
+            mensagemDiv.style.display = 'block';
+        }
+    }
+    
+    // Carregar os peritos quando a página carregar
+    carregarPeritos();
+    
     // Função para validar o formulário
     function validarFormulario() {
         const campos = [
@@ -22,7 +63,6 @@ document.addEventListener('DOMContentLoaded', function() {
             'processo_caso',
             'data_abertura_caso',
             'descricao_caso'
-            // Status removido dos campos obrigatórios
         ];
         
         let valido = true;
@@ -77,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Obter os dados do formulário
         const formData = {
             titulo_caso: document.getElementById('titulo_caso').value,
-            responsavel_caso: document.getElementById('responsavel_caso').value,
+            responsavel_caso: document.getElementById('responsavel_caso').value, // Isso já será o ID do perito
             processo_caso: document.getElementById('processo_caso').value,
             data_abertura_caso: document.getElementById('data_abertura_caso').value,
             descricao_caso: document.getElementById('descricao_caso').value,

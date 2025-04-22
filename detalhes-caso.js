@@ -10,10 +10,50 @@ document.addEventListener('DOMContentLoaded', function() {
     const deletarBtn = document.getElementById('deletarBtn');
     const atualizarBtn = document.getElementById('atualizarBtn');
     const mensagemDiv = document.getElementById('mensagem');
+    const selectPeritos = document.getElementById('responsavel_caso');
     
     // Obter o ID do caso armazenado (em uma situação real, seria passado via URL ou estado)
     casoId = localStorage.getItem('casoAtualId');
     if (idCasoSpan) idCasoSpan.textContent = `#${casoId}`;
+    
+    // Função para carregar os peritos
+    async function carregarPeritos() {
+        try {
+            console.log('Iniciando carregamento de peritos...');
+            
+            // Fazer requisição para a API que retorna apenas os peritos
+            const response = await fetch('http://localhost:5000/api/usuarios/tipo/Perito');
+            
+            if (!response.ok) {
+                throw new Error(`Erro ao carregar peritos: ${response.status} ${response.statusText}`);
+            }
+            
+            const peritos = await response.json();
+            console.log('Peritos carregados:', peritos);
+            
+            // Limpar o select antes de adicionar novas opções
+            selectPeritos.innerHTML = '<option value="">Selecione um perito</option>';
+            
+            // Adicionar cada perito como uma opção no select
+            peritos.forEach(perito => {
+                const option = document.createElement('option');
+                // Definimos o valor da option como o ID do perito (será enviado ao backend)
+                option.value = perito.id || perito._id; // Tentando tanto id quanto _id (MongoDB costuma usar _id)
+                // Definimos o texto visível como o nome do perito (será mostrado ao usuário)
+                option.textContent = perito.nome || perito.nome_completo || perito.name; // Tentando diferentes campos de nome
+                selectPeritos.appendChild(option);
+            });
+            
+            // Após carregar os peritos, carregar os detalhes do caso
+            carregarDetalhesCaso();
+        } catch (error) {
+            console.error('Erro ao carregar peritos:', error);
+            mostrarMensagem('Erro ao carregar a lista de peritos. Por favor, atualize a página.', 'erro');
+            
+            // Mesmo com erro, tentamos carregar os detalhes do caso
+            carregarDetalhesCaso();
+        }
+    }
     
     // Função para carregar os detalhes do caso
     async function carregarDetalhesCaso() {
@@ -39,7 +79,31 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Preencher o formulário com os dados do caso
             document.getElementById('titulo_caso').value = caso.titulo_caso || '';
-            document.getElementById('responsavel_caso').value = caso.responsavel_caso || '';
+            
+            // Definir o responsável selecionado
+            if (selectPeritos && caso.responsavel_caso) {
+                // Tentar encontrar e selecionar o perito correto
+                const opcoes = selectPeritos.options;
+                let peritoEncontrado = false;
+                
+                for (let i = 0; i < opcoes.length; i++) {
+                    if (opcoes[i].value === caso.responsavel_caso) {
+                        selectPeritos.selectedIndex = i;
+                        peritoEncontrado = true;
+                        break;
+                    }
+                }
+                
+                // Se não encontrou o perito nas opções mas temos o ID, adicionamos uma opção temporária
+                if (!peritoEncontrado && caso.responsavel_caso) {
+                    const option = document.createElement('option');
+                    option.value = caso.responsavel_caso;
+                    option.textContent = "[Nome não disponível]";
+                    selectPeritos.appendChild(option);
+                    selectPeritos.value = caso.responsavel_caso;
+                }
+            }
+            
             document.getElementById('processo_caso').value = caso.processo_caso || '';
             
             // Formatar a data para o formato do input date (YYYY-MM-DD)
@@ -173,6 +237,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 if (response.ok) {
                     mostrarMensagem('Caso atualizado com sucesso!', 'sucesso');
+                    
+                    // Após 2 segundos, voltar para a listagem
+                    setTimeout(function() {
+                        if (window.parent !== window) {
+                            window.parent.carregarListagemCasos();
+                        } else {
+                            window.location.href = 'listagem-caso.html';
+                        }
+                    }, 2000);
                 } else {
                     mostrarMensagem(data.error || 'Erro ao atualizar o caso', 'erro');
                 }
@@ -183,6 +256,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Carregar os detalhes do caso ao iniciar
-    carregarDetalhesCaso();
+    // Iniciar carregando os peritos, depois carrega os detalhes do caso
+    carregarPeritos();
 });

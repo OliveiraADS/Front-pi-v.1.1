@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil do Usuário</title>
+    <link rel="stylesheet" href="perfil.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="perfil-container">
+        <h2 class="perfil-title">Meu Perfil</h2>
+        
+        <div class="perfil-header">
+            <div class="perfil-header-left">
+                <div class="perfil-imagem-container">
+                    <div class="imagem-wrapper">
+                        <img id="perfilImagem" src="https://via.placeholder.com/100" alt="Foto de Perfil" class="perfil-imagem">
+                        <label for="uploadImagem" class="btn-atualizar-imagem circular">
+                            <i class="fas fa-camera"></i>
+                        </label>
+                        <input type="file" id="uploadImagem" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+                
+                <div class="perfil-nome">
+                    <span id="perfilPrimeiroNome" class="nome-italico"></span>
+                    <span id="perfilSegundoNome" class="nome-italico"></span>
+                </div>
+            </div>
+            
+            <div class="perfil-header-right">
+                <a href="#Atualiza_perfil.html" class="btn-atualizar-perfil">Atualizar Perfil</a>
+            </div>
+        </div>
+        
+        <!-- Cards de casos -->
+        <div class="casos-cards">
+            <div class="caso-card em-andamento">
+                <div class="caso-icon">
+                    <i class="fas fa-folder"></i>
+                </div>
+                <div class="caso-info">
+                    <h3>Em Andamento</h3>
+                    <span id="casosEmAndamento" class="caso-contador">0</span>
+                </div>
+            </div>
+            
+            <div class="caso-card finalizado">
+                <div class="caso-icon">
+                    <i class="fas fa-folder"></i>
+                </div>
+                <div class="caso-info">
+                    <h3>Finalizados</h3>
+                    <span id="casosFinalizados" class="caso-contador">0</span>
+                </div>
+            </div>
+            
+            <div class="caso-card arquivado">
+                <div class="caso-icon">
+                    <i class="fas fa-folder"></i>
+                </div>
+                <div class="caso-info">
+                    <h3>Arquivados</h3>
+                    <span id="casosArquivados" class="caso-contador">0</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="perfil-content">
+            <div class="perfil-dados">
+                <div class="perfil-campo">
+                    <label>Nome Completo</label>
+                    <div id="perfilNomeCompleto" class="perfil-valor"></div>
+                </div>
+                
+                <div class="perfil-campo">
+                    <label>E-mail</label>
+                    <div id="perfilEmail" class="perfil-valor"></div>
+                </div>
+                
+                <div class="perfil-campo">
+                    <label>Telefone</label>
+                    <div id="perfilTelefone" class="perfil-valor"></div>
+                </div>
+                
+                <div class="perfil-campo">
+                    <label>Tipo de Perfil</label>
+                    <div id="perfilTipo" class="perfil-valor"></div>
+                </div>
+                
+                <div class="perfil-campo">
+                    <label>CRO/UF</label>
+                    <div id="perfilCroUf" class="perfil-valor"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="mensagem" class="mensagem"></div>
+    </div>
+
+    <script src="perfil.js"></script>
+</body>
+</html>

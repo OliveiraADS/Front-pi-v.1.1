@@ -64,8 +64,24 @@ header {
   height: 35px;
   border-radius: 50%;
   object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
+/* Novo estilo para os detalhes do usuário */
+.user-details {
+  display: flex;
+  flex-direction: column;
+}
+
+#userName {
+  font-size: 0.9em;
+  font-weight: bold;
+}
+
+.user-role {
+  font-size: 0.7em;
+  opacity: 0.8;
+}
 .container {
   display: flex;
   min-height: 100vh;
