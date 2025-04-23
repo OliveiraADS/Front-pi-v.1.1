@@ -1,4 +1,4 @@
-// Arquivo para integração das páginas na home
+// Arquivo para integração das páginas na home (versão atualizada)
 
 document.addEventListener('DOMContentLoaded', function() {
     // Referências para os elementos de navegação
@@ -637,6 +637,7 @@ function inicializarPaginaPerfil() {
     
     // Converter dados do JSON para objeto
     const usuario = JSON.parse(usuarioData);
+    console.log('Usuário logado:', usuario);
     
     // Referências aos elementos da página
     const perfilImagem = document.getElementById('perfilImagem');
@@ -650,6 +651,11 @@ function inicializarPaginaPerfil() {
     const uploadInput = document.getElementById('uploadImagem');
     const mensagemDiv = document.getElementById('mensagem');
     
+    // Referências aos contadores de casos
+    const casosEmAndamentoSpan = document.getElementById('casosEmAndamento');
+    const casosFinalizadosSpan = document.getElementById('casosFinalizados');
+    const casosArquivadosSpan = document.getElementById('casosArquivados');
+    
     // Preencher os dados do perfil
     if (perfilPrimeiroNome) perfilPrimeiroNome.textContent = usuario.primeiro_nome || 'Não informado';
     if (perfilSegundoNome) perfilSegundoNome.textContent = usuario.segundo_nome || 'Não informado';
@@ -662,6 +668,70 @@ function inicializarPaginaPerfil() {
     // Carregar a imagem de perfil, se disponível
     if (perfilImagem && usuario.foto_perfil) {
         perfilImagem.src = usuario.foto_perfil;
+    }
+    
+    // Carregar contagem de casos por status usando a nova rota
+    carregarContagemCasos();
+    
+    // Função para carregar a contagem de casos por status
+    async function carregarContagemCasos() {
+        try {
+            // Verificar se temos o ID do usuário
+            if (!usuario || !usuario.id) {
+                console.error('ID de usuário não encontrado no localStorage');
+                return;
+            }
+            
+            console.log('Carregando contagem de casos para o usuário ID:', usuario.id);
+            
+            // Buscar casos "Em andamento"
+            const responseEmAndamento = await fetch(
+                `http://localhost:5000/api/casos/responsavel/${usuario.id}/status/Em andamento`
+            );
+            
+            // Buscar casos "Finalizado"
+            const responseFinalizado = await fetch(
+                `http://localhost:5000/api/casos/responsavel/${usuario.id}/status/Finalizado`
+            );
+            
+            // Buscar casos "Arquivado"
+            const responseArquivado = await fetch(
+                `http://localhost:5000/api/casos/responsavel/${usuario.id}/status/Arquivado`
+            );
+            
+            // Processar os dados e atualizar a interface
+            if (responseEmAndamento.ok) {
+                const dataEmAndamento = await responseEmAndamento.json();
+                console.log('Casos em andamento:', dataEmAndamento);
+                if (casosEmAndamentoSpan) {
+                    casosEmAndamentoSpan.textContent = dataEmAndamento.data.length || '0';
+                }
+            }
+            
+            if (responseFinalizado.ok) {
+                const dataFinalizado = await responseFinalizado.json();
+                console.log('Casos finalizados:', dataFinalizado);
+                if (casosFinalizadosSpan) {
+                    casosFinalizadosSpan.textContent = dataFinalizado.data.length || '0';
+                }
+            }
+            
+            if (responseArquivado.ok) {
+                const dataArquivado = await responseArquivado.json();
+                console.log('Casos arquivados:', dataArquivado);
+                if (casosArquivadosSpan) {
+                    casosArquivadosSpan.textContent = dataArquivado.data.length || '0';
+                }
+            }
+            
+        } catch (error) {
+            console.error('Erro ao carregar contagem de casos:', error);
+            
+            // Em caso de erro, manter os contadores em 0
+            if (casosEmAndamentoSpan) casosEmAndamentoSpan.textContent = '0';
+            if (casosFinalizadosSpan) casosFinalizadosSpan.textContent = '0';
+            if (casosArquivadosSpan) casosArquivadosSpan.textContent = '0';
+        }
     }
     
     // Função para mostrar mensagens

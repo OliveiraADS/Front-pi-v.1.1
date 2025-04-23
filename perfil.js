@@ -45,47 +45,71 @@ document.addEventListener('DOMContentLoaded', function() {
     carregarContagemCasos();
     
     // Função para carregar a contagem de casos por status
+
     async function carregarContagemCasos() {
+    try {
+        // Obter o ID do usuário logado
+        const usuario = JSON.parse(localStorage.getItem('usuarioOdontoLegal'));
+        if (!usuario || !usuario.id) {
+            console.error('ID de usuário não encontrado no localStorage');
+            return;
+        }
+        
+        // Log para depuração
+        console.log('ID do usuário:', usuario.id);
+        
+        // Referências aos elementos de contagem
+        const casosEmAndamentoSpan = document.getElementById('casosEmAndamento');
+        const casosFinalizadosSpan = document.getElementById('casosFinalizados');
+        const casosArquivadosSpan = document.getElementById('casosArquivados');
+        
+        // Fazer 3 requisições separadas para cada status
         try {
-            // Buscar todos os casos da API
-            const response = await fetch('http://localhost:5000/api/casos');
-            
-            if (!response.ok) {
-                throw new Error('Erro ao carregar casos');
+            // Buscar casos "Em andamento"
+            const responseEmAndamento = await fetch(`http://localhost:5000/api/casos/responsavel/${usuario.id}/status/Em andamento`);
+            if (responseEmAndamento.ok) {
+                const dataEmAndamento = await responseEmAndamento.json();
+                console.log('Casos em andamento:', dataEmAndamento);
+                if (dataEmAndamento.success && dataEmAndamento.data) {
+                    if (casosEmAndamentoSpan) casosEmAndamentoSpan.textContent = dataEmAndamento.data.length;
+                }
             }
             
-            const data = await response.json();
+            // Buscar casos "Finalizado"
+            const responseFinalizado = await fetch(`http://localhost:5000/api/casos/responsavel/${usuario.id}/status/Finalizado`);
+            if (responseFinalizado.ok) {
+                const dataFinalizado = await responseFinalizado.json();
+                console.log('Casos finalizados:', dataFinalizado);
+                if (dataFinalizado.success && dataFinalizado.data) {
+                    if (casosFinalizadosSpan) casosFinalizadosSpan.textContent = dataFinalizado.data.length;
+                }
+            }
             
-            if (data.success && data.data) {
-                const casos = data.data;
-                
-                // Filtrar casos por responsável e status
-                const responsavelId = usuario.id;
-                const casosFiltrados = casos.filter(caso => 
-                    caso.responsavel_caso === usuario.nome_completo || 
-                    caso.responsavel_caso === `${usuario.primeiro_nome} ${usuario.segundo_nome}` ||
-                    caso.responsavel_caso.includes(usuario.primeiro_nome)
-                );
-                
-                // Contar casos por status
-                const emAndamento = casosFiltrados.filter(caso => caso.status_caso === 'Em andamento').length;
-                const finalizados = casosFiltrados.filter(caso => caso.status_caso === 'Finalizado').length;
-                const arquivados = casosFiltrados.filter(caso => caso.status_caso === 'Arquivado').length;
-                
-                // Atualizar os contadores na interface
-                if (casosEmAndamentoSpan) casosEmAndamentoSpan.textContent = emAndamento;
-                if (casosFinalizadosSpan) casosFinalizadosSpan.textContent = finalizados;
-                if (casosArquivadosSpan) casosArquivadosSpan.textContent = arquivados;
+            // Buscar casos "Arquivado"
+            const responseArquivado = await fetch(`http://localhost:5000/api/casos/responsavel/${usuario.id}/status/Arquivado`);
+            if (responseArquivado.ok) {
+                const dataArquivado = await responseArquivado.json();
+                console.log('Casos arquivados:', dataArquivado);
+                if (dataArquivado.success && dataArquivado.data) {
+                    if (casosArquivadosSpan) casosArquivadosSpan.textContent = dataArquivado.data.length;
+                }
             }
         } catch (error) {
-            console.error('Erro ao carregar contagem de casos:', error);
-            
-            // Em caso de erro, manter os contadores em 0
-            if (casosEmAndamentoSpan) casosEmAndamentoSpan.textContent = '0';
-            if (casosFinalizadosSpan) casosFinalizadosSpan.textContent = '0';
-            if (casosArquivadosSpan) casosArquivadosSpan.textContent = '0';
+            console.error('Erro específico ao buscar casos:', error);
         }
+    } catch (error) {
+        console.error('Erro geral ao carregar contagem de casos:', error);
+        
+        // Em caso de erro, manter os contadores em 0
+        const casosEmAndamentoSpan = document.getElementById('casosEmAndamento');
+        const casosFinalizadosSpan = document.getElementById('casosFinalizados');
+        const casosArquivadosSpan = document.getElementById('casosArquivados');
+        
+        if (casosEmAndamentoSpan) casosEmAndamentoSpan.textContent = '0';
+        if (casosFinalizadosSpan) casosFinalizadosSpan.textContent = '0';
+        if (casosArquivadosSpan) casosArquivadosSpan.textContent = '0';
     }
+}
     
     // Função para mostrar mensagens
     function mostrarMensagem(texto, tipo) {
