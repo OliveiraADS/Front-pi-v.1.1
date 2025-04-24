@@ -21,6 +21,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const perfilCroUf = document.getElementById('perfilCroUf');
     const uploadInput = document.getElementById('uploadImagem');
     const mensagemDiv = document.getElementById('mensagem');
+
+    const btnAtualizarPerfil = document.getElementById('btnAtualizarPerfil');
     
     // Referências aos contadores de casos
     const casosEmAndamentoSpan = document.getElementById('casosEmAndamento');
