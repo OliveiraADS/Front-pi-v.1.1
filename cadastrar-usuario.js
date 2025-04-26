@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Verificar se o usuário está logado
     const usuarioData = localStorage.getItem('usuarioOdontoLegal');
     if (!usuarioData) {
-        window.location.href = 'index.html';
+        window.location.href = 'login.html';
         return;
     }
     
