@@ -16,6 +16,20 @@ document.addEventListener('DOMContentLoaded', function() {
     // Verificar permissões do usuário para mostrar/esconder menus
     verificarPermissoesUsuario();
     
+    // Função para mostrar mensagens
+    function mostrarMensagem(elemento, texto, tipo) {
+        if (!elemento) return;
+        
+        elemento.textContent = texto;
+        elemento.className = `mensagem ${tipo}`;
+        elemento.style.display = 'block';
+        
+        // Ocultar a mensagem após 5 segundos
+        setTimeout(() => {
+            elemento.style.display = 'none';
+        }, 5000);
+    }
+    
     // Adicionar event listeners aos links principais
     if (casosHeaderLink) {
         casosHeaderLink.addEventListener('click', function(e) {
@@ -64,12 +78,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// ------------------------------------------------------------------------------------------------------------
-
-// =========================================================
-// VERIFICAÇÃO DE PERMISSÕES DO USUÁRIO
-// =========================================================
-
 // Função para verificar permissões do usuário e exibir menus adequados
 function verificarPermissoesUsuario() {
     // Verificar se o usuário está logado
@@ -91,38 +99,15 @@ function verificarPermissoesUsuario() {
     }
 }
 
-// ------------------------------------------------------------------------------------------------------------
 
-// =========================================================
-// FUNÇÕES UTILITÁRIAS COMUNS
-// =========================================================
 
-// Função para mostrar mensagens
-window.mostrarMensagem = function(elemento, texto, tipo) {
-    if (!elemento) return;
-    
-    elemento.textContent = texto;
-    elemento.className = `mensagem ${tipo}`;
-    elemento.style.display = 'block';
-    
-    // Ocultar a mensagem após 5 segundos
-    setTimeout(() => {
-        elemento.style.display = 'none';
-    }, 5000);
-};
 
-// Função para formatar datas
-window.formatarData = function(dataString) {
-    try {
-        const data = new Date(dataString);
-        return data.toLocaleDateString('pt-BR');
-    } catch (error) {
-        console.error('Erro ao formatar data:', error);
-        return dataString || 'Data não disponível';
-    }
-};
+// Funções auxiliares comuns
+function formatarData(dataString) {
+    const data = new Date(dataString);
+    return data.toLocaleDateString('pt-BR');
+}
 
-// Função para obter classe de status
 function getStatusClass(status) {
     switch(status) {
         case 'Em andamento':
@@ -136,46 +121,41 @@ function getStatusClass(status) {
     }
 }
 
-// Função para validar campos obrigatórios de um formulário
-window.validarCamposObrigatorios = function(formData, campos) {
-    for (const campo of campos) {
-        if (!formData[campo]) {
-            return false;
+// Função para carregar a página de cadastro de usuário
+window.carregarCadastroUsuario = async function() {
+    try {
+        const mainContent = document.querySelector('main');
+        
+        // Buscar o conteúdo HTML da página de cadastro de usuário
+        const response = await fetch('cadastrar-usuario.html');
+        const html = await response.text();
+        
+        // Extrair apenas o conteúdo dentro do container principal
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const bodyContent = doc.querySelector('.atualizar-perfil-container');
+        
+        if (!bodyContent) {
+            mainContent.innerHTML = '<p style="padding: 20px;">Erro ao carregar a página de cadastro de usuário.</p>';
+            return;
         }
-    }
-    return true;
-};
-
-// Função para verificar se o usuário está logado
-window.verificarUsuarioLogado = function() {
-    const usuarioData = localStorage.getItem('usuarioOdontoLegal');
-    if (!usuarioData) {
-        window.location.href = 'index.html';
-        return false;
-    }
-    return JSON.parse(usuarioData);
-};
-
-// Função para atualizar o header com os dados do usuário
-window.atualizarHeaderUsuario = function(usuario) {
-    const userNameElement = document.getElementById('userName');
-    const userRoleElement = document.getElementById('userRole');
-    const userProfileImage = document.getElementById('userProfileImage');
-    
-    if (userNameElement) {
-        userNameElement.textContent = usuario.nome_completo || usuario.nome || 'Usuário';
-    }
-    
-    if (userRoleElement) {
-        userRoleElement.textContent = usuario.tipo_perfil || 'Perfil';
-    }
-    
-    if (userProfileImage && usuario.foto_perfil) {
-        userProfileImage.src = usuario.foto_perfil;
+        
+        // Substituir o conteúdo atual do main pelo conteúdo da página de cadastro
+        mainContent.innerHTML = '';
+        mainContent.appendChild(bodyContent.cloneNode(true));
+        
+        // Carregar script de cadastro de usuário dinamicamente
+        const script = document.createElement('script');
+        script.src = 'cadastrar-usuario.js';
+        document.body.appendChild(script);
+        
+    } catch (error) {
+        console.error('Erro ao carregar a página de cadastro de usuário:', error);
+        document.querySelector('main').innerHTML = '<p style="padding: 20px;">Erro ao carregar a página de cadastro de usuário.</p>';
     }
 };
 
-// ------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // =========================================================
 // FUNÇÕES DE GERENCIAMENTO DE CASOS
@@ -327,13 +307,6 @@ async function carregarCasos() {
     }
 }
 
-// ------------------------------------------------------------------------------------------------------------
-
-
-// =========================================================
-// INICIALIZAÇÃO E MANIPULAÇÃO DE FORMULÁRIO DE CASOS
-// =========================================================
-
 // Função para inicializar o formulário após carregamento dinâmico
 function inicializarFormulario() {
     // Definir a data de hoje como valor padrão para o campo de data
@@ -471,8 +444,7 @@ function inicializarFormulario() {
     });
 }
 
-// ------------------------------------------------------------------------------------------------------------
-
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // =========================================================
 // FUNÇÕES PARA VISUALIZAÇÃO E EDIÇÃO DE DETALHES DO CASO
@@ -735,8 +707,7 @@ async function inicializarPaginaDetalhes(id) {
     }
 }
 
-// ------------------------------------------------------------------------------------------------------------
-
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // =========================================================
 // FUNÇÕES DE GERENCIAMENTO DE PERFIL DO USUÁRIO
@@ -889,6 +860,20 @@ function inicializarPaginaPerfil() {
         }
     }
     
+    // Função para mostrar mensagens
+    function mostrarMensagem(texto, tipo) {
+        if (!mensagemDiv) return;
+        
+        mensagemDiv.textContent = texto;
+        mensagemDiv.className = `mensagem ${tipo}`;
+        mensagemDiv.style.display = 'block';
+        
+        // Ocultar a mensagem após 5 segundos
+        setTimeout(() => {
+            mensagemDiv.style.display = 'none';
+        }, 5000);
+    }
+    
     // Evento para quando o usuário selecionar uma imagem
     if (uploadInput) {
         uploadInput.addEventListener('change', function(e) {
@@ -900,13 +885,13 @@ function inicializarPaginaPerfil() {
             
             // Verificar se é uma imagem
             if (!arquivo.type.match('image.*')) {
-                mostrarMensagem(mensagemDiv, 'Por favor, selecione uma imagem válida.', 'erro');
+                mostrarMensagem('Por favor, selecione uma imagem válida.', 'erro');
                 return;
             }
             
             // Verificar tamanho (limite de 5MB)
             if (arquivo.size > 5 * 1024 * 1024) {
-                mostrarMensagem(mensagemDiv, 'A imagem deve ter menos de 5MB.', 'erro');
+                mostrarMensagem('A imagem deve ter menos de 5MB.', 'erro');
                 return;
             }
             
@@ -935,7 +920,7 @@ function inicializarPaginaPerfil() {
                     const data = await response.json();
                     
                     if (response.ok) {
-                        mostrarMensagem(mensagemDiv, 'Foto de perfil atualizada com sucesso!', 'sucesso');
+                        mostrarMensagem('Foto de perfil atualizada com sucesso!', 'sucesso');
                         
                         // Atualizar dados no localStorage
                         const dadosAtualizados = {
@@ -952,22 +937,22 @@ function inicializarPaginaPerfil() {
                         }
                     } else {
                         // Erro na atualização
-                        mostrarMensagem(mensagemDiv, data.mensagem || 'Erro ao atualizar foto de perfil', 'erro');
+                        mostrarMensagem(data.mensagem || 'Erro ao atualizar foto de perfil', 'erro');
                     }
                 } catch (error) {
                     console.error('Erro:', error);
-                    mostrarMensagem(mensagemDiv, 'Erro de conexão. Tente novamente mais tarde.', 'erro');
+                    mostrarMensagem('Erro de conexão. Tente novamente mais tarde.', 'erro');
                 }
             };
             
             leitor.onerror = function() {
-                mostrarMensagem(mensagemDiv, 'Erro ao processar a imagem selecionada.', 'erro');
+                mostrarMensagem('Erro ao processar a imagem selecionada.', 'erro');
             };
         });
     }
-}
+} 
 
-// ------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 // =========================================================
@@ -1234,213 +1219,80 @@ function inicializarPaginaAtualizarPerfil() {
     console.log('Inicialização da página de atualização de perfil concluída');
 }
 
-// ------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // =========================================================
-// FUNÇÕES PARA CADASTRO DE USUÁRIO
+// FUNÇÕES UTILITÁRIAS COMUNS
 // =========================================================
 
-// Função para carregar a página de cadastro de usuário
-window.carregarCadastroUsuario = async function() {
+// Função para mostrar mensagens
+window.mostrarMensagem = function(elemento, texto, tipo) {
+    if (!elemento) return;
+    
+    elemento.textContent = texto;
+    elemento.className = `mensagem ${tipo}`;
+    elemento.style.display = 'block';
+    
+    // Ocultar a mensagem após 5 segundos
+    setTimeout(() => {
+        elemento.style.display = 'none';
+    }, 5000);
+};
+
+// Função para formatar datas
+window.formatarData = function(dataString) {
     try {
-        const mainContent = document.querySelector('main');
-        
-        // Buscar o conteúdo HTML da página de cadastro de usuário
-        const response = await fetch('cadastrar-usuario.html');
-        const html = await response.text();
-        
-        // Extrair apenas o conteúdo dentro do container principal
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-        const bodyContent = doc.querySelector('.atualizar-perfil-container');
-        
-        if (!bodyContent) {
-            mainContent.innerHTML = '<p style="padding: 20px;">Erro ao carregar a página de cadastro de usuário.</p>';
-            return;
-        }
-        
-        // Substituir o conteúdo atual do main pelo conteúdo da página de cadastro
-        mainContent.innerHTML = '';
-        mainContent.appendChild(bodyContent.cloneNode(true));
-        
-        // Inicializar o formulário diretamente em vez de carregar o script externo
-        inicializarCadastroUsuario();
+        const data = new Date(dataString);
+        return data.toLocaleDateString('pt-BR');
     } catch (error) {
-        console.error('Erro ao carregar a página de cadastro de usuário:', error);
-        document.querySelector('main').innerHTML = '<p style="padding: 20px;">Erro ao carregar a página de cadastro de usuário.</p>';
+        console.error('Erro ao formatar data:', error);
+        return dataString || 'Data não disponível';
     }
 };
 
-// Função para inicializar o formulário de cadastro de usuário
-function inicializarCadastroUsuario() {
-    // Verificar se o usuário está logado
+// Função para validar campos obrigatórios de um formulário
+window.validarCamposObrigatorios = function(formData, campos) {
+    for (const campo of campos) {
+        if (!formData[campo]) {
+            return false;
+        }
+    }
+    return true;
+};
+
+// Função para verificar se o usuário está logado
+window.verificarUsuarioLogado = function() {
     const usuarioData = localStorage.getItem('usuarioOdontoLegal');
     if (!usuarioData) {
-        window.location.href = 'login.html';
-        return;
+        window.location.href = 'index.html';
+        return false;
+    }
+    return JSON.parse(usuarioData);
+};
+
+// Função para atualizar o header com os dados do usuário
+window.atualizarHeaderUsuario = function(usuario) {
+    const userNameElement = document.getElementById('userName');
+    const userRoleElement = document.getElementById('userRole');
+    const userProfileImage = document.getElementById('userProfileImage');
+    
+    if (userNameElement) {
+        userNameElement.textContent = usuario.nome_completo || usuario.nome || 'Usuário';
     }
     
-    // Converter dados do JSON para objeto
-    const usuarioLogado = JSON.parse(usuarioData);
-    
-    // Verificar se o usuário tem permissão (apenas Admin)
-    if (usuarioLogado.tipo_perfil !== 'Admin') {
-        alert('Você não tem permissão para acessar esta página.');
-        window.location.href = 'home.html';
-        return;
+    if (userRoleElement) {
+        userRoleElement.textContent = usuario.tipo_perfil || 'Perfil';
     }
     
-    // Referências aos elementos do formulário
-    const form = document.getElementById('cadastrarUsuarioForm');
-    const primeiroNomeInput = document.getElementById('primeiro_nome');
-    const segundoNomeInput = document.getElementById('segundo_nome');
-    const nomeCompletoInput = document.getElementById('nome_completo');
-    const dataNascimentoInput = document.getElementById('data_nascimento');
-    const emailInput = document.getElementById('email');
-    const senhaInput = document.getElementById('senha');
-    const confirmarSenhaInput = document.getElementById('confirmar_senha');
-    const telefoneInput = document.getElementById('telefone');
-    const tipoPerfilSelect = document.getElementById('tipo_perfil');
-    const croUfInput = document.getElementById('cro_uf');
-    const cancelarBtn = document.getElementById('cancelarBtn');
-    const mensagemDiv = document.getElementById('mensagem');
-    
-    console.log('Formulário inicializado:', {
-        form: !!form,
-        mensagemDiv: !!mensagemDiv,
-        cancelarBtn: !!cancelarBtn
-    });
-    
-    // Definir a data atual como valor padrão
-    if (dataNascimentoInput) {
-        const hoje = new Date();
-        const dataFormatada = hoje.toISOString().split('T')[0];
-        dataNascimentoInput.value = dataFormatada;
+    if (userProfileImage && usuario.foto_perfil) {
+        userProfileImage.src = usuario.foto_perfil;
     }
-    
-    // Função para mostrar mensagens
-    function mostrarMensagem(texto, tipo) {
-        if (!mensagemDiv) {
-            console.error('Elemento mensagemDiv não encontrado');
-            return;
-        }
-        
-        console.log('Mostrando mensagem:', { texto, tipo });
-        
-        mensagemDiv.textContent = texto;
-        mensagemDiv.className = `mensagem ${tipo}`;
-        mensagemDiv.style.display = 'block';
-        
-        // Não ocultar a mensagem de sucesso automaticamente, pois vamos redirecionar
-        if (tipo !== 'sucesso') {
-            // Ocultar a mensagem após 5 segundos se não for sucesso
-            setTimeout(() => {
-                mensagemDiv.style.display = 'none';
-            }, 5000);
-        }
-    }
-    
-    // Event listener para o botão "Cancelar"
-    if (cancelarBtn) {
-        cancelarBtn.addEventListener('click', function() {
-            console.log('Botão Cancelar clicado');
-            // Voltar para a listagem de usuários
-            if (typeof window.carregarListagemUsuarios === 'function') {
-                window.carregarListagemUsuarios();
-            } else {
-                console.error('Função carregarListagemUsuarios não encontrada');
-                // Caso a função não esteja disponível, voltar para a página inicial
-                document.querySelector('main').innerHTML = '<p style="padding: 20px;">Conteúdo aqui futuramente...</p>';
-            }
-        });
-    }
-    
-    // Event listener para o formulário
-    if (form) {
-        form.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            console.log('Formulário submetido');
-            
-            // Validar senhas
-            if (senhaInput.value !== confirmarSenhaInput.value) {
-                mostrarMensagem('As senhas não conferem. Por favor, verifique.', 'erro');
-                return;
-            }
-            
-            // Obter os dados do formulário
-            const formData = {
-                primeiro_nome: primeiroNomeInput.value,
-                segundo_nome: segundoNomeInput.value,
-                nome_completo: nomeCompletoInput.value,
-                data_nascimento: dataNascimentoInput.value,
-                email: emailInput.value,
-                senha: senhaInput.value,
-                telefone: telefoneInput.value || '',
-                tipo_perfil: tipoPerfilSelect.value,
-                cro_uf: croUfInput.value || ''
-            };
-            
-            console.log('Dados do formulário:', formData);
-            
-            try {
-                console.log('Enviando requisição para a API...');
-                // Fazer a requisição para criar o usuário
-                const response = await fetch('http://localhost:5000/api/usuarios', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(formData)
-                });
-                
-                console.log('Resposta da API:', {
-                    status: response.status,
-                    ok: response.ok
-                });
-                
-                const data = await response.json();
-                console.log('Dados da resposta:', data);
-                
-                if (response.ok) {
-                    // Cadastro realizado com sucesso
-                    mostrarMensagem('Usuário cadastrado com sucesso!', 'sucesso');
-                    
-                    // Desabilitar o botão de envio para evitar cliques repetidos
-                    const submitBtn = form.querySelector('button[type="submit"]');
-                    if (submitBtn) {
-                        submitBtn.disabled = true;
-                    }
-                    
-                    // Após 2 segundos, redirecionar para a listagem de usuários
-                    setTimeout(function() {
-                        console.log('Redirecionando para a listagem de usuários...');
-                        if (typeof window.carregarListagemUsuarios === 'function') {
-                            window.carregarListagemUsuarios();
-                        } else {
-                            console.error('Função carregarListagemUsuarios não encontrada');
-                            // Caso a função não esteja disponível, voltar para a página inicial
-                            document.querySelector('main').innerHTML = '<p style="padding: 20px;">Conteúdo aqui futuramente...</p>';
-                        }
-                    }, 2000);
-                } else {
-                    // Erro no cadastro
-                    mostrarMensagem(data.mensagem || 'Erro ao cadastrar o usuário. Por favor, tente novamente.', 'erro');
-                }
-            } catch (error) {
-                console.error('Erro na requisição:', error);
-                mostrarMensagem('Erro de conexão. Tente novamente mais tarde.', 'erro');
-            }
-        });
-    } else {
-        console.error('Formulário não encontrado');
-    }
-}
+};
 
 // ------------------------------------------------------------------------------------------------------------
 
-
 // =========================================================
-// FUNÇÕES PARA LISTAGEM DE USUÁRIOS
+// NOVAS FUNÇÕES PARA LISTAGEM DE USUÁRIOS
 // =========================================================
 
 // Função para carregar a página de listagem de usuários dentro do main
