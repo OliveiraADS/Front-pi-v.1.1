@@ -1,0 +1,139 @@
+/* Estilização para container principal da listagem de usuários */
+.usuarios-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Estilo para o título da seção */
+.usuarios-title {
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+/* Estilo para o cabeçalho da tabela de usuários */
+.usuarios-header {
+    display: flex;
+    justify-content: space-between;
+    background-color: #f8f9fa;
+    padding: 10px 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Estilo para cada coluna no cabeçalho */
+.usuarios-header div {
+    flex: 1;
+    text-align: center;
+}
+
+/* Container da lista de usuários */
+#usuarios-lista {
+    margin-top: 20px;
+}
+
+/* Estilo para cada item de usuário na lista */
+.usuario-item {
+    background-color: #e6f2ff; /* Azul claro para combinar com o estilo existente */
+    border-radius: 15px; /* Cantos arredondados */
+    padding: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    color: #333;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+/* Efeito de hover sobre os itens */
+.usuario-item:hover {
+    transform: translateY(-3px); /* Leve elevação ao passar o mouse */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Sombra mais pronunciada */
+    background-color: #d1e7ff; /* Tom mais escuro ao passar o mouse */
+}
+
+/* Estilo para cada coluna nos itens de usuário */
+.usuario-item div {
+    flex: 1;
+    text-align: center;
+}
+
+/* Estilo para mensagem quando não houver usuários */
+.no-usuarios {
+    text-align: center;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    color: #666;
+}
+
+/* Estilo para o formulário de cadastro */
+.form-container {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.form-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-primario {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-secundario {
+    background-color: #6c757d;
+    color: white;
+}
+
+.mensagem {
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.sucesso {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.erro {
+    background-color: #f8d7da;
+    color: #721c24;
+}

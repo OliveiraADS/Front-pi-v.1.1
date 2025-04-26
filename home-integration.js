@@ -9,6 +9,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const novoCasoLink = document.querySelector('.sidebar-item:nth-child(2)');
     const mainContent = document.querySelector('main');
     
+    // Adicionar referência para os links de usuários
+    const listarUsuariosLink = document.querySelector('#listarUsuariosLink');
+    const cadastrarUsuarioLink = document.querySelector('#cadastrarUsuarioLink');
+    
+    // Verificar permissões do usuário para mostrar/esconder menus
+    verificarPermissoesUsuario();
+    
     // Função para mostrar mensagens
     function mostrarMensagem(elemento, texto, tipo) {
         if (!elemento) return;
@@ -45,6 +52,22 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    // Adicionar event listener para o link "Listar Usuários"
+    if (listarUsuariosLink) {
+        listarUsuariosLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            carregarListagemUsuarios();
+        });
+    }
+    
+    // Adicionar event listener para o link "Cadastrar Usuário"
+    if (cadastrarUsuarioLink) {
+        cadastrarUsuarioLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            carregarCadastroUsuario();
+        });
+    }
+    
     // Adicionar event listener para tornar a área de usuário clicável
     const userInfoElement = document.querySelector('.user-info');
     if (userInfoElement) {
@@ -54,6 +77,30 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// Função para verificar permissões do usuário e exibir menus adequados
+function verificarPermissoesUsuario() {
+    // Verificar se o usuário está logado
+    const usuarioData = localStorage.getItem('usuarioOdontoLegal');
+    
+    if (usuarioData) {
+        // Converter dados do JSON para objeto
+        const usuario = JSON.parse(usuarioData);
+        
+        // Verificar se o usuário é Admin
+        if (usuario.tipo_perfil === 'Admin') {
+            // Mostrar os menus de usuários para administradores
+            const usuariosHeader = document.getElementById('usuariosHeader');
+            const usuariosMenu = document.getElementById('usuariosMenu');
+            
+            if (usuariosHeader) usuariosHeader.style.display = 'block';
+            if (usuariosMenu) usuariosMenu.style.display = 'block';
+        }
+    }
+}
+
+
+
 
 // Funções auxiliares comuns
 function formatarData(dataString) {
@@ -73,6 +120,40 @@ function getStatusClass(status) {
             return '';
     }
 }
+
+// Função para carregar a página de cadastro de usuário
+window.carregarCadastroUsuario = async function() {
+    try {
+        const mainContent = document.querySelector('main');
+        
+        // Buscar o conteúdo HTML da página de cadastro de usuário
+        const response = await fetch('cadastrar-usuario.html');
+        const html = await response.text();
+        
+        // Extrair apenas o conteúdo dentro do container principal
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const bodyContent = doc.querySelector('.atualizar-perfil-container');
+        
+        if (!bodyContent) {
+            mainContent.innerHTML = '<p style="padding: 20px;">Erro ao carregar a página de cadastro de usuário.</p>';
+            return;
+        }
+        
+        // Substituir o conteúdo atual do main pelo conteúdo da página de cadastro
+        mainContent.innerHTML = '';
+        mainContent.appendChild(bodyContent.cloneNode(true));
+        
+        // Carregar script de cadastro de usuário dinamicamente
+        const script = document.createElement('script');
+        script.src = 'cadastrar-usuario.js';
+        document.body.appendChild(script);
+        
+    } catch (error) {
+        console.error('Erro ao carregar a página de cadastro de usuário:', error);
+        document.querySelector('main').innerHTML = '<p style="padding: 20px;">Erro ao carregar a página de cadastro de usuário.</p>';
+    }
+};
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -1138,7 +1219,6 @@ function inicializarPaginaAtualizarPerfil() {
     console.log('Inicialização da página de atualização de perfil concluída');
 }
 
-
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // =========================================================
@@ -1208,3 +1288,100 @@ window.atualizarHeaderUsuario = function(usuario) {
         userProfileImage.src = usuario.foto_perfil;
     }
 };
+
+// =========================================================
+// NOVAS FUNÇÕES PARA LISTAGEM DE USUÁRIOS
+// =========================================================
+
+// Função para carregar a página de listagem de usuários dentro do main
+window.carregarListagemUsuarios = async function() {
+    try {
+        // Obter referência ao conteúdo principal da página
+        const mainContent = document.querySelector('main');
+        
+        // Criar o HTML para a listagem de usuários diretamente
+        mainContent.innerHTML = `
+            <div class="usuarios-container">
+                <h2 class="usuarios-title">Listagem de Usuários</h2>
+                
+                <div class="usuarios-header">
+                    <div class="nome">NOME COMPLETO</div>
+                    <div class="email">EMAIL</div>
+                    <div class="tipo">TIPO DE PERFIL</div>
+                    <div class="cro">CRO/UF</div>
+                    <div class="data">DATA DE CRIAÇÃO</div>
+                </div>
+                
+                <div id="usuarios-lista">
+                    <!-- Os usuários serão inseridos aqui através do JavaScript -->
+                    <div class="no-usuarios">Carregando usuários...</div>
+                </div>
+            </div>
+        `;
+        
+        // Carregar os usuários
+        carregarUsuarios();
+    } catch (error) {
+        console.error('Erro ao carregar a página de listagem de usuários:', error);
+        document.querySelector('main').innerHTML = '<p style="padding: 20px;">Erro ao carregar a listagem de usuários.</p>';
+    }
+};
+
+// Função para buscar os usuários da API
+async function carregarUsuarios() {
+    try {
+        // Fazer a requisição para a API
+        const response = await fetch('http://localhost:5000/api/usuarios');
+        
+        if (!response.ok) {
+            throw new Error('Erro ao carregar os usuários');
+        }
+        
+        const data = await response.json();
+        // Verificar se temos dados e se temos a propriedade "dados" ou "data"
+        const usuarios = data.dados || data.data || [];
+        
+        const usuariosListaElement = document.getElementById('usuarios-lista');
+        
+        if (!usuariosListaElement) {
+            console.error('Elemento #usuarios-lista não encontrado');
+            return;
+        }
+        
+        if (usuarios.length === 0) {
+            usuariosListaElement.innerHTML = '<div class="no-usuarios">Nenhum usuário encontrado</div>';
+            return;
+        }
+        
+        // Limpar a lista
+        usuariosListaElement.innerHTML = '';
+        
+        // Adicionar cada usuário à lista
+        usuarios.forEach(usuario => {
+            const usuarioElement = document.createElement('div');
+            usuarioElement.className = 'usuario-item';
+            
+            // Formatar a data de criação
+            const dataCriacao = formatarData(usuario.data_criacao);
+            
+            // Construir o HTML para cada item de usuário
+            usuarioElement.innerHTML = `
+                <div class="nome">${usuario.nome_completo || 'N/A'}</div>
+                <div class="email">${usuario.email || 'N/A'}</div>
+                <div class="tipo">${usuario.tipo_perfil || 'N/A'}</div>
+                <div class="cro">${usuario.cro_uf || 'N/A'}</div>
+                <div class="data">${dataCriacao}</div>
+            `;
+            
+            usuariosListaElement.appendChild(usuarioElement);
+        });
+        
+    } catch (error) {
+        console.error('Erro:', error);
+        const usuariosListaElement = document.getElementById('usuarios-lista');
+        if (usuariosListaElement) {
+            usuariosListaElement.innerHTML = 
+                '<div class="no-usuarios">Erro ao carregar os usuários. Por favor, tente novamente mais tarde.</div>';
+        }
+    }
+}

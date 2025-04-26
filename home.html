@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="detalhes-caso.css">
   <link rel="stylesheet" href="perfil.css">
   <link rel="stylesheet" href="atualiza-perfil.css">
+  <link rel="stylesheet" href="listagem-usuario.css">
 
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -44,6 +45,20 @@
         <a href="#" class="sidebar-item">
           <i class="fas fa-plus-circle"></i>
           <span>Novo Caso</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-header admin-only" id="usuariosHeader" style="display: none;">
+        <h3>Usuários</h3>
+      </div>
+      <nav class="sidebar-menu admin-only" id="usuariosMenu" style="display: none;">
+        <a href="#" class="sidebar-item" id="listarUsuariosLink">
+          <i class="fas fa-user"></i>
+          <span>Listar Usuários</span>
+        </a>
+        <a href="#" class="sidebar-item" id="cadastrarUsuarioLink">
+          <i class="fas fa-user-plus"></i>
+          <span>Cadastrar Usuário</span>
         </a>
       </nav>
     </aside>
