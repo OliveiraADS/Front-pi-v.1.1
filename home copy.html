@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ACCLP</title>
-  <link rel="stylesheet" href="styles/home.css">
+   <link rel="stylesheet" href="styles/home.css">
   <link rel="stylesheet" href="listagem-caso.css">
   <link rel="stylesheet" href="novo-caso.css">
   <link rel="stylesheet" href="detalhes-caso.css">
   <link rel="stylesheet" href="perfil.css">
   <link rel="stylesheet" href="atualiza-perfil.css">
   <link rel="stylesheet" href="listagem-usuario.css">
-  <link rel="stylesheet" href="permissoes.css">
+
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -29,9 +29,6 @@
         <span id="userName">Usuário Logado</span>
         <span id="userRole" class="user-role">Perfil</span>
       </div>
-      <button id="logoutBtn" class="logout-btn" title="Sair do sistema">
-        <i class="fas fa-sign-out-alt"></i>
-      </button>
     </div>
   </header>
 
@@ -45,7 +42,7 @@
           <i class="fas fa-list"></i>
           <span>Listagem de Casos</span>
         </a>
-        <a href="#" class="sidebar-item admin-ou-perito">
+        <a href="#" class="sidebar-item">
           <i class="fas fa-plus-circle"></i>
           <span>Novo Caso</span>
         </a>
@@ -68,23 +65,11 @@
 
     <main>
       <!-- Conteúdo da página -->
-      <p style="padding: 20px;">Carregando...</p>
+      <p style="padding: 20px;">Conteúdo aqui futuramente...</p>
     </main>
   </div>
 
-  <!-- Módulos JavaScript -->
-  <script src="js/1-core.js"></script>
-  <script src="js/2-listagem-casos.js"></script>
-  <script src="js/3-cadastro-caso.js"></script>
-  <script src="js/4-detalhes-caso.js"></script>
-  <script src="js/5-perfil-usuario.js"></script>
-  <script src="js/6-atualizar-perfil.js"></script>
-  <script src="js/7-cadastro-usuario.js"></script>
-  <script src="js/8-listagem-usuarios.js"></script>
-  <script src="js/9-perfil-usuario-by-id.js"></script>
-  <script src="js/10-atualizar-perfil-by-id.js"></script>
-  
-  <!-- Arquivo principal (inicialização) -->
-  <script src="js/0-main.js"></script>
+  <script src="home-integration.js"></script>
+  <script src="user-info.js"></script>
 </body>
 </html>
