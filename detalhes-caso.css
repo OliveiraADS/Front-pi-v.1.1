@@ -154,3 +154,100 @@
 .form-section:nth-child(2) .form-group label::after {
     content: ''; /* Remove o asterisco de campos opcionais */
 }
+
+/* Estilos para a seção de evidências */
+.evidencia-item {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #e9ecef;
+}
+
+.evidencia-item h4 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #333;
+    border-bottom: 1px solid #e9ecef;
+    padding-bottom: 10px;
+}
+
+.endereco-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.endereco-grid label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+    font-weight: normal;
+}
+
+.endereco-grid input {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+}
+
+.evidencia-imagem-container {
+    display: flex;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+.evidencia-imagem-preview {
+    width: 200px;
+    height: 200px;
+    border: 1px dashed #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f1f1f1;
+}
+
+.evidencia-imagem-inputs {
+    flex: 1;
+}
+
+.btn-adicionar {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.btn-adicionar:hover {
+    background-color: #218838;
+}
+
+.btn-deletar-evidencia {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.btn-deletar-evidencia:hover {
+    background-color: #c82333;
+}
+
+#sem-evidencias {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+    text-align: center;
+    color: #6c757d;
+    margin-bottom: 20px;
+}

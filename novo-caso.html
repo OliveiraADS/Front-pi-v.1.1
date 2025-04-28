@@ -71,6 +71,89 @@
                 </div>
             </div>
             
+            <!-- Nova seção de evidências -->
+            <div class="form-section">
+                <h3>Evidências</h3>
+                
+                <!-- Campos de endereço -->
+                <div class="sub-section">
+                    <h4>Endereço da Coleta</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="endereco_rua">Rua</label>
+                            <input type="text" id="endereco_rua" name="endereco_rua">
+                        </div>
+                        <div class="form-group">
+                            <label for="endereco_numero">Número</label>
+                            <input type="text" id="endereco_numero" name="endereco_numero">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="endereco_bairro">Bairro</label>
+                            <input type="text" id="endereco_bairro" name="endereco_bairro">
+                        </div>
+                        <div class="form-group">
+                            <label for="endereco_cidade">Cidade</label>
+                            <input type="text" id="endereco_cidade" name="endereco_cidade">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="endereco_estado">Estado</label>
+                            <input type="text" id="endereco_estado" name="endereco_estado">
+                        </div>
+                        <div class="form-group">
+                            <label for="endereco_cep">CEP</label>
+                            <input type="text" id="endereco_cep" name="endereco_cep">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Radiografia -->
+                <div class="sub-section">
+                    <h4>Radiografia</h4>
+                    <div class="form-group">
+                        <label for="radiografia_evidencia">Upload de Radiografia</label>
+                        <input type="file" id="radiografia_evidencia" name="radiografia_evidencia" accept="image/*">
+                        <div id="radiografia_preview" class="image-preview"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="radiografia_observacao_evidencia">Observações sobre a Radiografia</label>
+                        <textarea id="radiografia_observacao_evidencia" name="radiografia_observacao_evidencia" rows="2"></textarea>
+                    </div>
+                </div>
+                
+                <!-- Odontograma -->
+                <div class="sub-section">
+                    <h4>Odontograma</h4>
+                    <div class="form-group">
+                        <label for="odontograma_evidencia">Upload de Odontograma</label>
+                        <input type="file" id="odontograma_evidencia" name="odontograma_evidencia" accept="image/*">
+                        <div id="odontograma_preview" class="image-preview"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="odontograma_observacao_evidencia">Observações sobre o Odontograma</label>
+                        <textarea id="odontograma_observacao_evidencia" name="odontograma_observacao_evidencia" rows="2"></textarea>
+                    </div>
+                </div>
+                
+                <!-- Documentos -->
+                <div class="sub-section">
+                    <h4>Documentos</h4>
+                    <div class="form-group">
+                        <label for="documentos_evidencia">Upload de Documento</label>
+                        <input type="file" id="documentos_evidencia" name="documentos_evidencia" accept="image/*,.pdf">
+                        <div id="documentos_preview" class="image-preview"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="documentos_observacao_evidencia">Observações sobre o Documento</label>
+                        <textarea id="documentos_observacao_evidencia" name="documentos_observacao_evidencia" rows="2"></textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Botões de ação movidos para o fim do formulário -->
             <div class="form-actions">
                 <button type="button" id="cancelarBtn" class="btn-cancelar">Cancelar</button>
                 <button type="submit" class="btn-salvar">Salvar Caso</button>

@@ -78,6 +78,111 @@
                     <textarea id="observacao_vitima_caso" name="observacao_vitima_caso" rows="3"></textarea>
                 </div>
             </div>
+
+            <!-- Adicione esta nova seção após a seção de informações da vítima no formulário -->
+            <div class="form-section" id="evidencias-section">
+    <h3>Evidências</h3>
+    <div id="evidencias-container">
+        <p id="carregando-evidencias">Carregando evidências...</p>
+        <div id="sem-evidencias" style="display: none;">Nenhuma evidência encontrada para este caso.</div>
+    </div>
+
+    <div id="template-evidencia" style="display: none;">
+        <div class="evidencia-item">
+            <h4>Evidência <span class="evidencia-index"></span></h4>
+            
+            <!-- Endereço -->
+            <div class="form-group">
+                <label>Endereço</label>
+                <div class="endereco-grid">
+                    <div>
+                        <label for="rua_evidencia">Rua</label>
+                        <input type="text" class="rua_evidencia" name="rua_evidencia">
+                    </div>
+                    <div>
+                        <label for="numero_evidencia">Número</label>
+                        <input type="text" class="numero_evidencia" name="numero_evidencia">
+                    </div>
+                    <div>
+                        <label for="bairro_evidencia">Bairro</label>
+                        <input type="text" class="bairro_evidencia" name="bairro_evidencia">
+                    </div>
+                    <div>
+                        <label for="cep_evidencia">CEP</label>
+                        <input type="text" class="cep_evidencia" name="cep_evidencia">
+                    </div>
+                    <div>
+                        <label for="cidade_evidencia">Cidade</label>
+                        <input type="text" class="cidade_evidencia" name="cidade_evidencia">
+                    </div>
+                    <div>
+                        <label for="estado_evidencia">Estado</label>
+                        <input type="text" class="estado_evidencia" name="estado_evidencia">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Radiografia -->
+            <div class="form-group">
+                <label>Radiografia</label>
+                <div class="evidencia-imagem-container">
+                    <div class="evidencia-imagem-preview">
+                        <img class="radiografia_preview" src="" alt="Nenhuma imagem" style="max-width: 200px; max-height: 200px;">
+                    </div>
+                    <div class="evidencia-imagem-inputs">
+                        <input type="file" class="radiografia_input" accept="image/*">
+                        <input type="hidden" class="radiografia_evidencia" name="radiografia_evidencia">
+                        <div class="form-group">
+                            <label>Observações</label>
+                            <textarea class="radiografia_observacao_evidencia" name="radiografia_observacao_evidencia" rows="2"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Odontograma -->
+            <div class="form-group">
+                <label>Odontograma</label>
+                <div class="evidencia-imagem-container">
+                    <div class="evidencia-imagem-preview">
+                        <img class="odontograma_preview" src="" alt="Nenhuma imagem" style="max-width: 200px; max-height: 200px;">
+                    </div>
+                    <div class="evidencia-imagem-inputs">
+                        <input type="file" class="odontograma_input" accept="image/*">
+                        <input type="hidden" class="odontograma_evidencia" name="odontograma_evidencia">
+                        <div class="form-group">
+                            <label>Observações</label>
+                            <textarea class="odontograma_observacao_evidencia" name="odontograma_observacao_evidencia" rows="2"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Documentos -->
+            <div class="form-group">
+                <label>Documentos</label>
+                <div class="evidencia-imagem-container">
+                    <div class="evidencia-imagem-preview">
+                        <img class="documentos_preview" src="" alt="Nenhuma imagem" style="max-width: 200px; max-height: 200px;">
+                    </div>
+                    <div class="evidencia-imagem-inputs">
+                        <input type="file" class="documentos_input" accept="image/*,.pdf">
+                        <input type="hidden" class="documentos_evidencia" name="documentos_evidencia">
+                        <div class="form-group">
+                            <label>Observações</label>
+                            <textarea class="documentos_observacao_evidencia" name="documentos_observacao_evidencia" rows="2"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <input type="hidden" class="evidencia_id" name="evidencia_id">
+            <button type="button" class="btn-deletar-evidencia admin-ou-perito">Excluir Evidência</button>
+        </div>
+    </div>
+    
+    <button type="button" id="adicionar-evidencia" class="btn-adicionar admin-ou-perito">Adicionar Nova Evidência</button>
+            </div>
             
             <div class="form-actions">
                 <button type="button" id="voltarBtn" class="btn-voltar">Voltar</button>
