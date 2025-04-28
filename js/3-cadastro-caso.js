@@ -107,14 +107,24 @@ function inicializarFormulario() {
         // Obter os dados do formulário
         const formData = {
             titulo_caso: document.getElementById('titulo_caso').value,
-            responsavel_caso: document.getElementById('responsavel_caso').value, // Agora enviará o ID do perito
+            responsavel_caso: document.getElementById('responsavel_caso').value, // ID do perito
             processo_caso: document.getElementById('processo_caso').value,
             data_abertura_caso: document.getElementById('data_abertura_caso').value,
             descricao_caso: document.getElementById('descricao_caso').value,
-            status_caso: 'Em andamento' // Status padrão
+            status_caso: 'Em andamento', // Status padrão
+            
+            // Novos campos da vítima
+            nome_completo_vitima_caso: document.getElementById('nome_completo_vitima_caso') ? 
+                document.getElementById('nome_completo_vitima_caso').value : '',
+            data_nac_vitima_caso: document.getElementById('data_nac_vitima_caso') ? 
+                document.getElementById('data_nac_vitima_caso').value : null,
+            sexo_vitima_caso: document.getElementById('sexo_vitima_caso') ? 
+                document.getElementById('sexo_vitima_caso').value : '',
+            observacao_vitima_caso: document.getElementById('observacao_vitima_caso') ? 
+                document.getElementById('observacao_vitima_caso').value : ''
         };
         
-        // Validar campos obrigatórios (exceto status)
+        // Validar campos obrigatórios (exceto status e campos da vítima, que não são obrigatórios)
         const camposObrigatorios = ['titulo_caso', 'responsavel_caso', 'processo_caso', 'data_abertura_caso', 'descricao_caso'];
         let camposFaltando = false;
         
@@ -131,6 +141,9 @@ function inicializarFormulario() {
             }
             return;
         }
+        
+        // Log dos dados que serão enviados para debug
+        console.log('Enviando dados para a API:', formData);
         
         try {
             // Fazer a requisição para a API

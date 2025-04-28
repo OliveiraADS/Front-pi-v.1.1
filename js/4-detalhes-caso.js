@@ -106,6 +106,9 @@ async function inicializarPaginaDetalhes(id) {
         
         const caso = data.data;
         
+        // Log dos dados recebidos para debug
+        console.log('Dados do caso recebidos:', caso);
+        
         // Preencher o formulário com os dados do caso
         document.getElementById('titulo_caso').value = caso.titulo_caso || '';
         
@@ -156,9 +159,36 @@ async function inicializarPaginaDetalhes(id) {
             }
         }
         
+        // Preencher os campos da vítima
+        const nomeVitimaInput = document.getElementById('nome_completo_vitima_caso');
+        if (nomeVitimaInput) {
+            nomeVitimaInput.value = caso.nome_completo_vitima_caso || '';
+        }
+        
+        const dataNascVitimaInput = document.getElementById('data_nac_vitima_caso');
+        if (dataNascVitimaInput && caso.data_nac_vitima_caso) {
+            const dataNasc = new Date(caso.data_nac_vitima_caso);
+            const dataNascFormatada = dataNasc.toISOString().split('T')[0];
+            dataNascVitimaInput.value = dataNascFormatada;
+        }
+        
+        const sexoVitimaSelect = document.getElementById('sexo_vitima_caso');
+        if (sexoVitimaSelect && caso.sexo_vitima_caso) {
+            for (let i = 0; i < sexoVitimaSelect.options.length; i++) {
+                if (sexoVitimaSelect.options[i].value === caso.sexo_vitima_caso) {
+                    sexoVitimaSelect.selectedIndex = i;
+                    break;
+                }
+            }
+        }
+        
+        const observacaoVitimaTextarea = document.getElementById('observacao_vitima_caso');
+        if (observacaoVitimaTextarea) {
+            observacaoVitimaTextarea.value = caso.observacao_vitima_caso || '';
+        }
+        
         // Adicionar event listeners aos botões
         const voltarBtn = document.getElementById('voltarBtn');
-        // Não redeclaramos deletarBtn aqui, pois já foi declarado acima
         const form = document.getElementById('detalhesCasoForm');
         const mensagemDiv = document.getElementById('mensagem');
         
@@ -213,10 +243,23 @@ async function inicializarPaginaDetalhes(id) {
                     processo_caso: document.getElementById('processo_caso').value,
                     data_abertura_caso: document.getElementById('data_abertura_caso').value,
                     descricao_caso: document.getElementById('descricao_caso').value,
-                    status_caso: document.getElementById('status_caso').value
+                    status_caso: document.getElementById('status_caso').value,
+                    
+                    // Novos campos da vítima
+                    nome_completo_vitima_caso: document.getElementById('nome_completo_vitima_caso') ? 
+                        document.getElementById('nome_completo_vitima_caso').value : '',
+                    data_nac_vitima_caso: document.getElementById('data_nac_vitima_caso') ? 
+                        document.getElementById('data_nac_vitima_caso').value : null,
+                    sexo_vitima_caso: document.getElementById('sexo_vitima_caso') ? 
+                        document.getElementById('sexo_vitima_caso').value : '',
+                    observacao_vitima_caso: document.getElementById('observacao_vitima_caso') ? 
+                        document.getElementById('observacao_vitima_caso').value : ''
                 };
                 
-                // Validar campos obrigatórios
+                // Log dos dados que serão enviados para debug
+                console.log('Enviando dados para atualização:', formData);
+                
+                // Validar campos obrigatórios (exceto campos da vítima, que não são obrigatórios)
                 const camposObrigatorios = ['titulo_caso', 'responsavel_caso', 'processo_caso', 'data_abertura_caso', 'descricao_caso'];
                 let camposFaltando = false;
                 

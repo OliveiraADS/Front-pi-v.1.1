@@ -116,3 +116,27 @@
     margin-left: 4px;
 }
 
+/* Adicionar ao arquivo novo-caso.css */
+
+/* Estilos para as seções do formulário */
+.form-section {
+    margin-bottom: 30px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 20px;
+}
+
+.form-section h3 {
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 1.2em;
+}
+
+/* Último form-section não precisa da borda */
+.form-section:last-of-type {
+    border-bottom: none;
+}
+
+/* Ajuste para o label de campos não obrigatórios */
+.form-section:nth-child(2) .form-group label::after {
+    content: ''; /* Remove o asterisco de campos opcionais */
+}

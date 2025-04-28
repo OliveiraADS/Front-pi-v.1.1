@@ -126,6 +126,38 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
             
+            // Preencher os campos da vítima
+            // Nome da vítima
+            if (document.getElementById('nome_completo_vitima_caso')) {
+                document.getElementById('nome_completo_vitima_caso').value = caso.nome_completo_vitima_caso || '';
+            }
+            
+            // Data de nascimento da vítima
+            if (document.getElementById('data_nac_vitima_caso') && caso.data_nac_vitima_caso) {
+                // Verifica se a data não é null antes de formatá-la
+                if (caso.data_nac_vitima_caso) {
+                    const dataNascimento = new Date(caso.data_nac_vitima_caso);
+                    const dataNascFormatada = dataNascimento.toISOString().split('T')[0];
+                    document.getElementById('data_nac_vitima_caso').value = dataNascFormatada;
+                }
+            }
+            
+            // Sexo da vítima
+            const sexoSelect = document.getElementById('sexo_vitima_caso');
+            if (sexoSelect && caso.sexo_vitima_caso) {
+                for (let i = 0; i < sexoSelect.options.length; i++) {
+                    if (sexoSelect.options[i].value === caso.sexo_vitima_caso) {
+                        sexoSelect.selectedIndex = i;
+                        break;
+                    }
+                }
+            }
+            
+            // Observações sobre a vítima
+            if (document.getElementById('observacao_vitima_caso')) {
+                document.getElementById('observacao_vitima_caso').value = caso.observacao_vitima_caso || '';
+            }
+            
         } catch (error) {
             console.error('Erro:', error);
             mostrarMensagem('Erro ao carregar detalhes do caso. Por favor, tente novamente.', 'erro');
@@ -211,10 +243,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 processo_caso: document.getElementById('processo_caso').value,
                 data_abertura_caso: document.getElementById('data_abertura_caso').value,
                 descricao_caso: document.getElementById('descricao_caso').value,
-                status_caso: document.getElementById('status_caso').value
+                status_caso: document.getElementById('status_caso').value,
+                
+                // Novos campos da vítima
+                nome_completo_vitima_caso: document.getElementById('nome_completo_vitima_caso').value,
+                data_nac_vitima_caso: document.getElementById('data_nac_vitima_caso').value || null,
+                sexo_vitima_caso: document.getElementById('sexo_vitima_caso').value,
+                observacao_vitima_caso: document.getElementById('observacao_vitima_caso').value
             };
             
-            // Validar campos obrigatórios
+            // Validar campos obrigatórios (excluindo os novos campos da vítima, que não são obrigatórios)
             const camposObrigatorios = ['titulo_caso', 'responsavel_caso', 'processo_caso', 'data_abertura_caso', 'descricao_caso'];
             
             for (const campo of camposObrigatorios) {

@@ -104,57 +104,63 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Event listener para o formulário
-    novoCasoForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
+novoCasoForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    if (!validarFormulario()) {
+        mensagemDiv.className = 'mensagem erro';
+        mensagemDiv.textContent = 'Por favor, preencha todos os campos obrigatórios.';
+        mensagemDiv.style.display = 'block';
+        return;
+    }
+    
+    // Obter os dados do formulário
+    const formData = {
+        titulo_caso: document.getElementById('titulo_caso').value,
+        responsavel_caso: document.getElementById('responsavel_caso').value, // Isso já será o ID do perito
+        processo_caso: document.getElementById('processo_caso').value,
+        data_abertura_caso: document.getElementById('data_abertura_caso').value,
+        descricao_caso: document.getElementById('descricao_caso').value,
+        status_caso: 'Em andamento', // Definido como padrão "Em andamento"
         
-        if (!validarFormulario()) {
-            mensagemDiv.className = 'mensagem erro';
-            mensagemDiv.textContent = 'Por favor, preencha todos os campos obrigatórios.';
+        // Novos campos da vítima
+        nome_completo_vitima_caso: document.getElementById('nome_completo_vitima_caso').value,
+        data_nac_vitima_caso: document.getElementById('data_nac_vitima_caso').value || null,
+        sexo_vitima_caso: document.getElementById('sexo_vitima_caso').value,
+        observacao_vitima_caso: document.getElementById('observacao_vitima_caso').value
+    };
+    
+    try {
+        // Fazer a requisição para a API
+        const response = await fetch('http://localhost:5000/api/casos', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            // Cadastro bem-sucedido
+            mensagemDiv.className = 'mensagem sucesso';
+            mensagemDiv.textContent = 'Caso cadastrado com sucesso!';
             mensagemDiv.style.display = 'block';
-            return;
-        }
-        
-        // Obter os dados do formulário
-        const formData = {
-            titulo_caso: document.getElementById('titulo_caso').value,
-            responsavel_caso: document.getElementById('responsavel_caso').value, // Isso já será o ID do perito
-            processo_caso: document.getElementById('processo_caso').value,
-            data_abertura_caso: document.getElementById('data_abertura_caso').value,
-            descricao_caso: document.getElementById('descricao_caso').value,
-            status_caso: 'Em andamento' // Definido como padrão "Em andamento"
-        };
-        
-        try {
-            // Fazer a requisição para a API
-            const response = await fetch('http://localhost:5000/api/casos', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            });
             
-            const data = await response.json();
-            
-            if (response.ok) {
-                // Cadastro bem-sucedido
-                mensagemDiv.className = 'mensagem sucesso';
-                mensagemDiv.textContent = 'Caso cadastrado com sucesso!';
-                mensagemDiv.style.display = 'block';
-                
-                // Limpar o formulário após 2 segundos
-                setTimeout(limparFormulario, 2000);
-            } else {
-                // Erro no cadastro
-                mensagemDiv.className = 'mensagem erro';
-                mensagemDiv.textContent = data.error || 'Erro ao cadastrar o caso. Por favor, tente novamente.';
-                mensagemDiv.style.display = 'block';
-            }
-        } catch (error) {
-            console.error('Erro:', error);
+            // Limpar o formulário após 2 segundos
+            setTimeout(limparFormulario, 2000);
+        } else {
+            // Erro no cadastro
             mensagemDiv.className = 'mensagem erro';
-            mensagemDiv.textContent = 'Erro ao conectar com o servidor. Por favor, verifique sua conexão.';
+            mensagemDiv.textContent = data.error || 'Erro ao cadastrar o caso. Por favor, tente novamente.';
             mensagemDiv.style.display = 'block';
         }
+    } catch (error) {
+        console.error('Erro:', error);
+        mensagemDiv.className = 'mensagem erro';
+        mensagemDiv.textContent = 'Erro ao conectar com o servidor. Por favor, verifique sua conexão.';
+        mensagemDiv.style.display = 'block';
+    }
     });
 });
