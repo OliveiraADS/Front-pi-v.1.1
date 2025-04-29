@@ -402,7 +402,7 @@ async function carregarEvidenciasDoCaso(casoId, mongoId) {
         if (evidencias.length === 0) {
             try {
                 console.log('Tentando buscar evidências usando id_caso:', casoId);
-                response = await fetch(`http://localhost:5000/api/evidencias/caso/${casoId}`);
+                response = await fetch(`http://localhost:5000/api/evidencias/caso/${mongoId}`);
                 
                 console.log('Resposta da API para id_caso:', response.status, response.statusText);
                 
@@ -425,7 +425,7 @@ async function carregarEvidenciasDoCaso(casoId, mongoId) {
             try {
                 // Converter o mongoId para string, pois talvez esteja sendo armazenado dessa forma
                 console.log('Tentando buscar evidências usando mongoId como string');
-                response = await fetch(`http://localhost:5000/api/evidencias/caso/string/${mongoId}`);
+                response = await fetch(`http://localhost:5000/api/evidencias/caso/${mongoId}`);
                 
                 console.log('Resposta da API para mongoId como string:', response.status, response.statusText);
                 

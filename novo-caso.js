@@ -26,6 +26,21 @@ document.addEventListener('DOMContentLoaded', function() {
     // =====================================================
     
     /**
+     * Verifica o tamanho do arquivo antes de processar
+     * @param {File} file - O arquivo a ser verificado
+     * @param {number} limiteMB - Limite máximo em MB (padrão: 5MB)
+     * @returns {boolean} - true se o arquivo estiver dentro do limite
+     */
+    function verificarTamanhoArquivo(file, limiteMB = 5) {
+        const tamanhoMaximoBytes = limiteMB * 1024 * 1024;
+        if (file.size > tamanhoMaximoBytes) {
+            alert(`O arquivo ${file.name} é muito grande. Tamanho máximo: ${limiteMB}MB`);
+            return false;
+        }
+        return true;
+    }
+    
+    /**
      * Converte um arquivo para string Base64
      * @param {File} file - O arquivo a ser convertido
      * @returns {Promise<string>} - O arquivo em formato Base64
@@ -242,18 +257,39 @@ document.addEventListener('DOMContentLoaded', function() {
             // Converte radiografia para Base64 se um arquivo foi selecionado
             const radiografiaInput = document.getElementById('radiografia_evidencia');
             if (radiografiaInput && radiografiaInput.files && radiografiaInput.files[0]) {
+                // Verifica o tamanho do arquivo antes de converter
+                if (!verificarTamanhoArquivo(radiografiaInput.files[0])) {
+                    mensagemDiv.className = 'mensagem erro';
+                    mensagemDiv.textContent = 'O arquivo de radiografia é muito grande. Use arquivos menores que 5MB.';
+                    mensagemDiv.style.display = 'block';
+                    return;
+                }
                 radiografiaBase64 = await fileToBase64(radiografiaInput.files[0]);
             }
             
             // Converte odontograma para Base64 se um arquivo foi selecionado
             const odontogramaInput = document.getElementById('odontograma_evidencia');
             if (odontogramaInput && odontogramaInput.files && odontogramaInput.files[0]) {
+                // Verifica o tamanho do arquivo antes de converter
+                if (!verificarTamanhoArquivo(odontogramaInput.files[0])) {
+                    mensagemDiv.className = 'mensagem erro';
+                    mensagemDiv.textContent = 'O arquivo de odontograma é muito grande. Use arquivos menores que 5MB.';
+                    mensagemDiv.style.display = 'block';
+                    return;
+                }
                 odontogramaBase64 = await fileToBase64(odontogramaInput.files[0]);
             }
             
             // Converte documento para Base64 se um arquivo foi selecionado
             const documentosInput = document.getElementById('documentos_evidencia');
             if (documentosInput && documentosInput.files && documentosInput.files[0]) {
+                // Verifica o tamanho do arquivo antes de converter
+                if (!verificarTamanhoArquivo(documentosInput.files[0])) {
+                    mensagemDiv.className = 'mensagem erro';
+                    mensagemDiv.textContent = 'O arquivo de documento é muito grande. Use arquivos menores que 5MB.';
+                    mensagemDiv.style.display = 'block';
+                    return;
+                }
                 documentosBase64 = await fileToBase64(documentosInput.files[0]);
             }
             
@@ -269,11 +305,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Dados da vítima
                 nome_completo_vitima_caso: document.getElementById('nome_completo_vitima_caso').value || 'Nome não informado', // Valor padrão se não for informado
                 data_nac_vitima_caso: document.getElementById('data_nac_vitima_caso').value || null,
-                sexo_vitima_caso: document.getElementById('sexo_vitima_caso').value || 'Não informado',
+                sexo_vitima_caso: document.getElementById('sexo_vitima_caso').value || '',
                 observacao_vitima_caso: document.getElementById('observacao_vitima_caso').value || ''
             };
             
-            // Prepara os dados da evidência
+            // Prepara os dados da evidência - Removendo o id_caso, o backend adicionará automaticamente
             const dadosEvidencia = {
                 endereco: {
                     rua: document.getElementById('endereco_rua') ? document.getElementById('endereco_rua').value : '',
@@ -328,6 +364,11 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const data = await response.json();
             
+            // Mostre mais detalhes do erro no console
+            if (!response.ok) {
+                console.error('Detalhes do erro:', data);
+            }
+            
             if (response.ok) {
                 // Cadastro bem-sucedido
                 mensagemDiv.className = 'mensagem sucesso';
@@ -337,15 +378,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Limpa o formulário após 2 segundos
                 setTimeout(limparFormulario, 2000);
             } else {
-                // Erro no cadastro
+                // Erro no cadastro - Mensagem mais detalhada
+                let mensagemErro = 'Erro ao cadastrar o caso. ';
+                
+                if (data.mensagem) {
+                    mensagemErro += data.mensagem;
+                } else if (data.error) {
+                    mensagemErro += data.error;
+                } else if (data.sucesso === false) {
+                    mensagemErro += 'Verifique os dados e tente novamente.';
+                }
+                
                 mensagemDiv.className = 'mensagem erro';
-                mensagemDiv.textContent = data.error || 'Erro ao cadastrar o caso. Por favor, tente novamente.';
+                mensagemDiv.textContent = mensagemErro;
                 mensagemDiv.style.display = 'block';
             }
         } catch (error) {
-            console.error('Erro:', error);
+            console.error('Erro completo:', error);
             mensagemDiv.className = 'mensagem erro';
-            mensagemDiv.textContent = 'Erro ao conectar com o servidor. Por favor, verifique sua conexão.';
+            mensagemDiv.textContent = `Erro ao conectar com o servidor: ${error.message}`;
             mensagemDiv.style.display = 'block';
         }
     });

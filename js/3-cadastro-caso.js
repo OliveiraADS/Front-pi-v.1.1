@@ -55,6 +55,21 @@ function mostrarMensagem(elemento, texto, tipo) {
 }
 
 /**
+ * Verifica o tamanho do arquivo antes de processar
+ * @param {File} file - O arquivo a ser verificado
+ * @param {number} limiteMB - Limite máximo em MB (padrão: 5MB)
+ * @returns {boolean} - true se o arquivo estiver dentro do limite
+ */
+function verificarTamanhoArquivo(file, limiteMB = 5) {
+    const tamanhoMaximoBytes = limiteMB * 1024 * 1024;
+    if (file.size > tamanhoMaximoBytes) {
+        alert(`O arquivo ${file.name} é muito grande. Tamanho máximo: ${limiteMB}MB`);
+        return false;
+    }
+    return true;
+}
+
+/**
  * Converte um arquivo para string Base64
  * @param {File} file - O arquivo a ser convertido
  * @returns {Promise<string>} - O arquivo em formato Base64
@@ -245,18 +260,39 @@ function inicializarFormulario() {
             // Converte radiografia para Base64 se um arquivo foi selecionado
             const radiografiaInput = document.getElementById('radiografia_evidencia');
             if (radiografiaInput && radiografiaInput.files && radiografiaInput.files[0]) {
+                // Verifica o tamanho do arquivo antes de converter
+                if (!verificarTamanhoArquivo(radiografiaInput.files[0])) {
+                    if (mensagemDiv) {
+                        mostrarMensagem(mensagemDiv, 'O arquivo de radiografia é muito grande. Use arquivos menores que 5MB.', 'erro');
+                    }
+                    return;
+                }
                 radiografiaBase64 = await fileToBase64(radiografiaInput.files[0]);
             }
             
             // Converte odontograma para Base64 se um arquivo foi selecionado
             const odontogramaInput = document.getElementById('odontograma_evidencia');
             if (odontogramaInput && odontogramaInput.files && odontogramaInput.files[0]) {
+                // Verifica o tamanho do arquivo antes de converter
+                if (!verificarTamanhoArquivo(odontogramaInput.files[0])) {
+                    if (mensagemDiv) {
+                        mostrarMensagem(mensagemDiv, 'O arquivo de odontograma é muito grande. Use arquivos menores que 5MB.', 'erro');
+                    }
+                    return;
+                }
                 odontogramaBase64 = await fileToBase64(odontogramaInput.files[0]);
             }
             
             // Converte documento para Base64 se um arquivo foi selecionado
             const documentosInput = document.getElementById('documentos_evidencia');
             if (documentosInput && documentosInput.files && documentosInput.files[0]) {
+                // Verifica o tamanho do arquivo antes de converter
+                if (!verificarTamanhoArquivo(documentosInput.files[0])) {
+                    if (mensagemDiv) {
+                        mostrarMensagem(mensagemDiv, 'O arquivo de documento é muito grande. Use arquivos menores que 5MB.', 'erro');
+                    }
+                    return;
+                }
                 documentosBase64 = await fileToBase64(documentosInput.files[0]);
             }
             
@@ -280,7 +316,7 @@ function inicializarFormulario() {
                     document.getElementById('observacao_vitima_caso').value : ''
             };
             
-            // Prepara os dados da evidência
+            // Prepara os dados da evidência - Removendo o id_caso, o backend adicionará automaticamente
             const dadosEvidencia = {
                 endereco: {
                     rua: document.getElementById('endereco_rua') ? document.getElementById('endereco_rua').value : '',
@@ -334,7 +370,12 @@ function inicializarFormulario() {
                 body: JSON.stringify(dadosParaEnvio)
             });
             
+            // Mostre mais detalhes do erro no console
             const data = await response.json();
+            
+            if (!response.ok) {
+                console.error('Detalhes do erro:', data);
+            }
             
             if (response.ok) {
                 // Cadastro bem-sucedido
@@ -351,15 +392,25 @@ function inicializarFormulario() {
                     }
                 }, 2000);
             } else {
-                // Erro no cadastro
+                // Erro no cadastro - Mensagem mais detalhada
+                let mensagemErro = 'Erro ao cadastrar o caso. ';
+                
+                if (data.mensagem) {
+                    mensagemErro += data.mensagem;
+                } else if (data.error) {
+                    mensagemErro += data.error;
+                } else if (data.sucesso === false) {
+                    mensagemErro += 'Verifique os dados e tente novamente.';
+                }
+                
                 if (mensagemDiv) {
-                    mostrarMensagem(mensagemDiv, data.error || 'Erro ao cadastrar o caso. Por favor, tente novamente.', 'erro');
+                    mostrarMensagem(mensagemDiv, mensagemErro, 'erro');
                 }
             }
         } catch (error) {
-            console.error('Erro:', error);
+            console.error('Erro completo:', error);
             if (mensagemDiv) {
-                mostrarMensagem(mensagemDiv, 'Erro ao conectar com o servidor. Por favor, verifique sua conexão.', 'erro');
+                mostrarMensagem(mensagemDiv, `Erro ao conectar com o servidor: ${error.message}`, 'erro');
             }
         }
     });

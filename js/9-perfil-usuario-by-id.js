@@ -103,7 +103,7 @@ function inicializarPerfilUsuarioById(usuario) {
             perfilImagem.src = fotoPerfil;
         } else {
             console.log('Usuário não tem foto de perfil, usando placeholder');
-            perfilImagem.src = 'https://via.placeholder.com/100';
+            perfilImagem.src = 'img/foto_perfil.jpg';
         }
     } else {
         console.error('Elemento perfilImagem não encontrado');
